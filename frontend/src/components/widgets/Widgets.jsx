@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
+import { DotenvConfigOptions } from "dotenv";
 import "./widgets.css";
 import axios from "axios";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 
 export default function Widgets() {
   const [news, setNews] = useState([]);
+  const newsapikey = process.env.REACT_APP_NEWS_API_KEY;
   const fetchLatestNews = async () => {
     try {
       let res = await axios.get(
-        `https://newsapi.org/v2/everything?q=technology&sortBy=latest&limit=5&apiKey=${process.env.newsapikey}`
+        `https://newsapi.org/v2/everything?q=technology&sortBy=latest&limit=5&apiKey=${newsapikey}`
       );
       setNews(res.data.articles);
     } catch (error) {
