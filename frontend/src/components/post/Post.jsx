@@ -149,16 +149,14 @@ export default function Post() {
           </div>
         ))
       ) : (
-        <div>There's no post</div>
+        <div className="d-flex justify-content-center align-items-center flex-column h-100">
+          <img
+            src="https://img.freepik.com/premium-vector/nothing-here-flat-illustration_418302-77.jpg"
+            alt=""
+            className="w-100"
+          />
+        </div>
       )}
-      {
-        // show loading spinner if posts is null or undefined
-        isLoading && (
-          <main className="clock-loader-main">
-            <div className="clock-loader"></div>
-          </main>
-        )
-      }
     </section>
   );
 }
