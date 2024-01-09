@@ -1,0 +1,30 @@
+@media screen and (max-width: 1000px) {
+  .mywidgetsbar {
+    display: none !important;
+  }
+}
+
+.newsDiv::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: #f5f5f5;
+}
+
+.newsDiv::-webkit-scrollbar {
+  width: 6px;
+  background-color: #f5f5f5;
+}
+
+.newsDiv::-webkit-scrollbar-thumb {
+  background-color: #000000;
+}
+
+.newsCard {
+  background-color: aliceblue;
+  border-radius: 1rem;
+  padding: 1rem;
+  margin: 1rem;
+}
+
+.newsCard img {
+  border-radius: 1rem;
+}
