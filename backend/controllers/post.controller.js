@@ -1,21 +1,22 @@
 const { PostModel } = require("../models/post.model");
 const { CommentModel } = require('../models/comment.model');
-const axios = require('axios');
 
 const postContent = async (req, res) => {
     try {
         const { title, author } = req.body;
-        const newPost = await PostModel.create({
-            title,
+        const newPost = await PostModel({
+            title: title,
             imageUrl: `https://monogram.onrender.com/${req.file.filename}`,
-            author,
-        });
+            author: author
+        })
+        await newPost.save();
         res.status(200).send({ message: 'Post uploaded' });
     } catch (error) {
-        console.error(error);
+        console.log(error)
         res.status(400).send({ message: "Post couldn't be uploaded" });
     }
-};
+}
+
 
 const getPost = async (req, res) => {
     const limit = 3;
@@ -23,58 +24,44 @@ const getPost = async (req, res) => {
     const skip = (Number(currentPage) - 1) * limit;
 
     try {
-        const posts = await PostModel
-            .find()
-            .sort({ date: -1 })
-            .skip(skip)
-            .limit(limit)
-            .populate('comments')
-            .exec();
+        const posts = await PostModel.aggregate([
+            { $sort: { date: -1 } },
+            { $skip: skip },
+            { $limit: limit }
+        ]);
 
-        const totalPosts = await PostModel.countDocuments();
+        const totalPosts = posts.length;
 
-
-        console.log(posts);
-        res.status(200).send({
-            data: data,
-            totalPosts,
-            currentPage,
-            totalPages: Math.ceil(totalPosts / limit),
+        // Populate comments after the aggregation
+        await PostModel.populate(posts, {
+            path: 'comments'
         });
-    } catch (error) {
-        console.error("while fetching posts ", error);
-        res.status(500).send({ message: error.message });
-    }
-};
 
-const getNews = async (req, res) => {
-    try {
-        const response = await axios.get(
-            `https://newsapi.org/v2/everything?q=technology&sortBy=latest&limit=5&apiKey=${process.env.news_api}`
-        );
-        res.status(200).send({ data: response.data });
+        return res.status(200).send({ data: "some data", totalPosts, currentPage, totalPages: Math.ceil(totalPosts / limit) });
     } catch (error) {
-        console.error(error);
-        res.status(400).send({ error: error.message });
+        console.log("while fetching posts ", error);
+        return res.status(500).send({ message: error });
     }
-};
+}
+
 
 const createComment = async (req, res) => {
     const { postId, commentText } = req.body;
     try {
-        const post = await PostModel.findById(postId);
+        let post = await PostModel.findById(postId)
         if (!post) {
-            return res.status(400).send({ msg: 'No such post found' });
+            return res.status(400).send({ "msg": 'No such post found' });
         } else {
-            const newComment = await CommentModel.create({ comment: commentText });
-            post.comments.push(newComment["_id"]);
-            await post.save();
-            res.status(201).send({ msg: "comment is added" });
+            let newComment = new CommentModel({ comment: commentText }); // Corrected this line
+            await post.comments.push(newComment["_id"])
+            await post.save()
+            await newComment.save();
+            return res.status(201).send({ "msg": "comment is added" });
         }
     } catch (error) {
-        console.error(error);
-        res.status(400).send({ msg: error.message });
+        console.log(error)
+        return res.status(400).send({ "msg": error.message });
     }
-};
+}
 
-module.exports = { postContent, getPost, createComment, getNews };
+module.exports = { postContent, getPost, createComment }
