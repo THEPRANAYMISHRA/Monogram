@@ -4,7 +4,7 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 import "./posts.css";
 
 export default function Post() {
-  const baseurl = "https://monogram.onrender.com";
+  const baseurl = "https://easy-lamb-girdle.cyclic.app";
   const [posts, setPosts] = useState(null);
   const [isLoading, setIsLoading] = useState(null);
   const [page, setPage] = useState(1);
