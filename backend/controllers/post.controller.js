@@ -37,7 +37,7 @@ const getPost = async (req, res) => {
             path: 'comments'
         });
 
-        return res.status(200).send({ data: "some data", totalPosts, currentPage, totalPages: Math.ceil(totalPosts / limit) });
+        return res.status(200).send({ data: posts, totalPosts, currentPage, totalPages: Math.ceil(totalPosts / limit) });
     } catch (error) {
         console.log("while fetching posts ", error);
         return res.status(500).send({ message: error });
