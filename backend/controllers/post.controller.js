@@ -6,7 +6,7 @@ const postContent = async (req, res) => {
         const { title, author } = req.body;
         const newPost = await PostModel({
             title: title,
-            imageUrl: `http://localhost:4500/${req.file.filename}`,
+            imageUrl: `https://monogram.onrender.com/${req.file.filename}`,
             author: author
         })
         await newPost.save();
@@ -39,7 +39,7 @@ const getPost = async (req, res) => {
 
         return res.status(200).send({ data: posts, totalPosts, currentPage, totalPages: Math.ceil(totalPosts / limit) });
     } catch (error) {
-        console.log(error);
+        console.log("while fetcging posts ", error);
         return res.status(500).send({ message: "Internal Server Error" });
     }
 }
