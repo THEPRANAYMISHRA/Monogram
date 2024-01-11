@@ -23,17 +23,15 @@ const getPost = async (req, res) => {
     const skip = (Number(currentPage) - 1) * limit;
 
     try {
-        const posts = await PostModel.aggregate([
-            { $skip: skip },
-            { $limit: limit },
-        ]);
+        const posts = await PostModel
+            .find()
+            .sort({ date: -1 })
+            .skip(skip)
+            .limit(limit)
+            .populate('comments')
+            .exec();
 
-        const totalPosts = posts.length;
-
-        // Populate comments after the aggregation
-        await PostModel.populate(posts, {
-            path: 'comments',
-        });
+        const totalPosts = await PostModel.countDocuments();
 
         res.status(200).send({
             data: posts,
