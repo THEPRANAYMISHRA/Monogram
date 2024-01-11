@@ -4,12 +4,20 @@ const { CommentModel } = require('../models/comment.model');
 const postContent = async (req, res) => {
     try {
         const { title, author } = req.body;
-        const newPost = await PostModel({
-            title: title,
-            imageUrl: `https://easy-lamb-girdle.cyclic.app/${req.file.filename || 'none'}`,
-            author: author
-        })
-        await newPost.save();
+        if (req.file) {
+            const newPost = await PostModel({
+                title: title,
+                imageUrl: `https://easy-lamb-girdle.cyclic.app/${req.file.filename}`,
+                author: author
+            })
+            await newPost.save();
+        } else {
+            const newPost = await PostModel({
+                title: title,
+                author: author
+            })
+            await newPost.save();
+        }
         res.status(200).send({ message: 'Post uploaded' });
     } catch (error) {
         console.log(error)
