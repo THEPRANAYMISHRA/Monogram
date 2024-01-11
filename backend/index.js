@@ -1,13 +1,16 @@
 const express = require('express')
 const cors = require('cors');
 const { connection } = require('./db')
-const { postRouter } = require('./routes/post.route')
+const { postRouter } = require('./routes/post.route');
+const { getNews } = require('./controllers/post.controller');
 const app = express()
 app.use(cors())
 app.use(express.json())
 app.use(express.static('uploads'))
 
 app.use("/post", postRouter)
+
+app.get("/news", getNews)
 
 app.get("/health", (req, res) => {
     return res.status(200).send({ "message": "health is fine!" })

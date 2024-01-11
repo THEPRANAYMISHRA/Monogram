@@ -44,6 +44,18 @@ const getPost = async (req, res) => {
     }
 }
 
+const getNews = async (req, res) => {
+    try {
+        let res = await axios.get(
+            `https://newsapi.org/v2/everything?q=technology&sortBy=latest&limit=5&apiKey=${process.env.news_api}`
+        );
+        return res.status(200).send({ "data": res })
+    } catch (error) {
+        console.log(error);
+        return res.status(400).send({ "eroor": error })
+    }
+}
+
 const createComment = async (req, res) => {
     const { postId, commentText } = req.body;
     try {
@@ -63,4 +75,4 @@ const createComment = async (req, res) => {
     }
 }
 
-module.exports = { postContent, getPost, createComment }
+module.exports = { postContent, getPost, createComment, getNews }
