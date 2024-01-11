@@ -33,8 +33,10 @@ const getPost = async (req, res) => {
 
         const totalPosts = await PostModel.countDocuments();
 
+
+        console.log(posts);
         res.status(200).send({
-            data: posts,
+            data: data,
             totalPosts,
             currentPage,
             totalPages: Math.ceil(totalPosts / limit),

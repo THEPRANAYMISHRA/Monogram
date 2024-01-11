@@ -9,9 +9,6 @@ app.use(express.json())
 app.use(express.static('uploads'))
 
 app.use("/post", postRouter)
-
-app.get("/news", getNews)
-
 app.get("/health", (req, res) => {
     return res.status(200).send({ "message": "health is fine!" })
 })
