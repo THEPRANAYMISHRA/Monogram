@@ -9,6 +9,10 @@ app.use(express.static('uploads'))
 
 app.use("/post", postRouter)
 
+app.get("/health", (req, res) => {
+    return res.status(200).send({ "message": "health is fine!" })
+})
+
 app.listen(4500, async () => {
     try {
         await connection
