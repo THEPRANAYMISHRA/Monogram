@@ -52,7 +52,7 @@ const getNews = async (req, res) => {
         return res.status(200).send({ "data": res })
     } catch (error) {
         console.log(error);
-        return res.status(400).send({ "eroor": error })
+        return res.status(400).send({ "erorr": error })
     }
 }
 
