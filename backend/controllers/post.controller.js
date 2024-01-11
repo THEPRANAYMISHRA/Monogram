@@ -24,10 +24,9 @@ const getPost = async (req, res) => {
 
     try {
         const posts = await PostModel.aggregate([
-            { $sort: { date: -1 } },
             { $skip: skip },
             { $limit: limit },
-        ]).allowDiskUse(true);
+        ]);
 
         const totalPosts = posts.length;
 
