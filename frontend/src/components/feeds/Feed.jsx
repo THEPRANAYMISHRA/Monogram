@@ -6,6 +6,7 @@ import "./feed.css";
 import Post from "../post/Post";
 
 export default function Feed() {
+  const baseurl = "https://monogram.onrender.com";
   const [title, setTitle] = useState("");
   const [image, setImage] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
@@ -24,11 +25,9 @@ export default function Feed() {
         if (image !== null) {
           formData.append("image", image);
         }
-        const response = await axios.post(
-          "http://localhost:4500/post/",
-          formData,
-          { headers: { "Content-Type": "multipart/form-data" } }
-        );
+        const response = await axios.post(`${baseurl}/post/`, formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
         setResponse(response.data.message);
       } catch (error) {
         console.error(error);

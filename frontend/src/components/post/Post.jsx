@@ -4,6 +4,7 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 import "./posts.css";
 
 export default function Post() {
+  const baseurl = "https://monogram.onrender.com";
   const [posts, setPosts] = useState(null);
   const [isLoading, setIsLoading] = useState(null);
   const [page, setPage] = useState(1);
@@ -14,7 +15,7 @@ export default function Post() {
   const fetchPosts = async () => {
     try {
       setIsLoading(true);
-      let res = await axios.get(`http://localhost:4500/post/?page=${page}`);
+      let res = await axios.get(`${baseurl}/post/?page=${page}`);
       if (posts) {
         console.log(posts);
         setPosts((prev) => [...prev, ...res.data.data]);
@@ -54,7 +55,7 @@ export default function Post() {
     e.preventDefault();
     try {
       const data = { postId: post_id, commentText: commentInput };
-      let res = await axios.post(`http://localhost:4500/post/comment`, data);
+      let res = await axios.post(`${baseurl}/post/comment`, data);
       console.log(res);
     } catch (error) {
       console.log(error);
