@@ -39,8 +39,8 @@ const getPost = async (req, res) => {
 
         return res.status(200).send({ data: posts, totalPosts, currentPage, totalPages: Math.ceil(totalPosts / limit) });
     } catch (error) {
-        console.log("while fetcging posts ", error);
-        return res.status(500).send({ message: "Internal Server Error" });
+        console.log("while fetching posts ", error);
+        return res.status(500).send({ message: error });
     }
 }
 
