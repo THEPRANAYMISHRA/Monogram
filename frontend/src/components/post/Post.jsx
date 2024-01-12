@@ -9,16 +9,19 @@ export default function Post() {
   const [posts, setPosts] = useState(null);
   const [isLoading, setIsLoading] = useState(null);
   const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(null);
   const [commentBox, setCommentBox] = useState(null);
   const [commentInput, setCommentInput] = useState(null);
   const sectionRef = useRef(null);
 
   const fetchPosts = async () => {
     try {
+      if (totalPages === page) return;
       setIsLoading(true);
       let res = await axios.get(`${baseurl}/post/?page=${page}`);
       if (posts) {
         setPosts((prev) => [...prev, ...res.data.data]);
+        setTotalPages(res.data.totalPages);
       } else {
         setPosts(res.data.data);
       }

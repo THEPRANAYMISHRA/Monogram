@@ -38,7 +38,7 @@ const getPost = async (req, res) => {
             { $limit: limit }
         ]);
 
-        const totalPosts = posts.length;
+        const totalPosts = await PostModel.find({}).countDocuments();
 
         // Populate comments after the aggregation
         await PostModel.populate(posts, {
