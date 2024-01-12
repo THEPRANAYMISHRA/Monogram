@@ -16,7 +16,6 @@ export default function Post() {
 
   const fetchPosts = async () => {
     try {
-      if (totalPages === page) return;
       setIsLoading(true);
       let res = await axios.get(`${baseurl}/post/?page=${page}`);
       if (posts) {
@@ -39,7 +38,7 @@ export default function Post() {
         section.scrollTop + section.offsetHeight + 1 >=
         section.scrollHeight
       ) {
-        setPage((prev) => prev + 1);
+        page < totalPages && setPage((prev) => prev + 1);
       }
     } catch (error) {
       console.log(error);
@@ -66,7 +65,11 @@ export default function Post() {
   };
 
   useEffect(() => {
-    fetchPosts();
+    if (totalPages === page) {
+      return;
+    } else {
+      fetchPosts();
+    }
   }, [page]);
 
   useEffect(() => {
