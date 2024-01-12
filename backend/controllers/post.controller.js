@@ -7,7 +7,7 @@ const postContent = async (req, res) => {
         if (req.file) {
             const newPost = await PostModel({
                 title: title,
-                imageUrl: `https://easy-lamb-girdle.cyclic.app/${req.file.filename}`,
+                imageUrl: `https://monogram.onrender.com/${req.file.filename}`,
                 author: author
             })
             await newPost.save();

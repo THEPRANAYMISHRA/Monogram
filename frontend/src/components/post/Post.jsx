@@ -2,9 +2,10 @@ import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "./posts.css";
+import Cards from "../loadingCards/Cards";
 
 export default function Post() {
-  const baseurl = "https://easy-lamb-girdle.cyclic.app";
+  const baseurl = "https://monogram.onrender.com";
   const [posts, setPosts] = useState(null);
   const [isLoading, setIsLoading] = useState(null);
   const [page, setPage] = useState(1);
@@ -17,7 +18,6 @@ export default function Post() {
       setIsLoading(true);
       let res = await axios.get(`${baseurl}/post/?page=${page}`);
       if (posts) {
-        console.log(posts);
         setPosts((prev) => [...prev, ...res.data.data]);
       } else {
         setPosts(res.data.data);
@@ -83,7 +83,10 @@ export default function Post() {
       className="overflow-auto d-flex flex-column gap-3 h-100 myposts"
       ref={sectionRef}
     >
-      {posts ? (
+      {isLoading && <Cards />}
+
+      {posts &&
+        isLoading === false &&
         posts.map((post, index) => (
           <div
             className="d-flex flex-column w-100 border p-2 rounded gap-2"
@@ -146,18 +149,19 @@ export default function Post() {
                     </div>
                   );
                 })}
+
+              {!posts && !isLoading && (
+                <div className="d-flex justify-content-center align-items-center flex-column h-100">
+                  <img
+                    src="https://img.freepik.com/premium-vector/nothing-here-flat-illustration_418302-77.jpg"
+                    alt=""
+                    className="w-100"
+                  />
+                </div>
+              )}
             </section>
           </div>
-        ))
-      ) : (
-        <div className="d-flex justify-content-center align-items-center flex-column h-100">
-          <img
-            src="https://img.freepik.com/premium-vector/nothing-here-flat-illustration_418302-77.jpg"
-            alt=""
-            className="w-100"
-          />
-        </div>
-      )}
+        ))}
     </section>
   );
 }

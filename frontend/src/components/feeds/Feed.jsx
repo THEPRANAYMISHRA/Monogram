@@ -28,11 +28,17 @@ export default function Feed() {
         const response = await axios.post(`${baseurl}/post/`, formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
-        setResponse(response.data.message);
+        setResponse(response);
+        setTitle("");
+        setImage(null);
+        setPreviewImage(null);
       } catch (error) {
         console.error(error);
       } finally {
         setIsUploading(false);
+        setTimeout(() => {
+          setResponse(null);
+        }, 2000);
       }
     } else {
       return;
@@ -94,7 +100,6 @@ export default function Feed() {
               height={50}
               className="rounded"
               alt=""
-              srcset=""
             />
           </div>
           <button className="btn btn-secondary" onClick={handleUnselectPhotos}>
@@ -103,10 +108,16 @@ export default function Feed() {
         </div>
       )}
       <div
-        className={resposnse ? "alert alert-primary" : "d-none"}
+        className={
+          resposnse?.status === 400
+            ? "alert alert-danger"
+            : resposnse?.status === 200
+            ? "alert alert-primary"
+            : "d-none"
+        }
         role="alert"
       >
-        {resposnse}
+        {resposnse?.data?.message}
       </div>
       <Post />
     </div>
