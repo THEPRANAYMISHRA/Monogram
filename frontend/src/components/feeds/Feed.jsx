@@ -6,7 +6,7 @@ import "./feed.css";
 import Post from "../post/Post";
 
 export default function Feed() {
-  const baseurl = "https://easy-lamb-girdle.cyclic.app";
+  const baseurl = "https://monogram.onrender.com";
   const [title, setTitle] = useState("");
   const [image, setImage] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
