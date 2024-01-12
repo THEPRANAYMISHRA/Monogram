@@ -27,7 +27,7 @@ const postContent = async (req, res) => {
 
 
 const getPost = async (req, res) => {
-    const limit = 3;
+    const limit = 5;
     const currentPage = req.query.page || 1;
     const skip = (Number(currentPage) - 1) * limit;
 
