@@ -66,7 +66,7 @@ export default function Membership() {
       }
 
       const options = {
-        key: process.env.REACT_APP_RAZOR,
+        key: "rzp_test_e1P2mhZlev4Ix3",
         amount,
         currency,
         name: "Monogram",
