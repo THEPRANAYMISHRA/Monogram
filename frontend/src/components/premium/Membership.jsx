@@ -6,6 +6,7 @@ import { auth } from "../../firebase.init";
 export default function Membership() {
   const baseurl = "https://monogram.onrender.com";
   // const baseurl = "http://localhost:4500";
+  const key_sec = process.env.REACT_APP_RAZOR;
   const [user, isLoading] = useAuthState(auth);
   const [selectedPlan, setSelectedPlan] = useState();
   const [currentPlan, setCurrentPlan] = useState("Basic");
@@ -66,7 +67,7 @@ export default function Membership() {
       }
 
       const options = {
-        key: process.env.REACT_APP_RAZOR,
+        key: key_sec,
         amount,
         currency,
         name: "Monogram",
