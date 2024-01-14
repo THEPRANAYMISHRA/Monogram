@@ -67,7 +67,7 @@ export default function Membership() {
       }
 
       const options = {
-        key: key_sec,
+        key: key_sec || "rzp_test_e1P2mhZlev4Ix3",
         amount,
         currency,
         name: "Monogram",
