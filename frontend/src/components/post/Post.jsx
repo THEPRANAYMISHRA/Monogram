@@ -6,6 +6,7 @@ import Cards from "../loadingCards/Cards";
 
 export default function Post() {
   const baseurl = "https://monogram.onrender.com";
+  // const baseurl = "http://localhost:4500";
   const [posts, setPosts] = useState(null);
   const [isLoading, setIsLoading] = useState(null);
   const [page, setPage] = useState(1);

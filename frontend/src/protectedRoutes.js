@@ -1,5 +1,4 @@
-import React from "react"
-// import second from "first";
+import React, { useState } from "react"
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "./firebase.init";
 import { Navigate } from "react-router-dom";
