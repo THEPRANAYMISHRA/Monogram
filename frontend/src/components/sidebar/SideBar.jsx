@@ -24,10 +24,10 @@ export default function SideBar() {
           <i className="bx bxl-messenger"></i>
           <span>Messages</span>
         </button>
-        <button className="myButton">
-          <i className="bx bx-list-ul"></i>
-          <span>Lists</span>
-        </button>
+        <Link to="/membership" className="myButton text-center">
+          <i className="bx bxs-star-half"></i>
+          <span>Membership</span>
+        </Link>
         <button className="myButton">
           <i className="bx bx-bookmarks"></i>
           <span>Bookmarks</span>

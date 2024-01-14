@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { auth } from "../../firebase.init";
 import {
@@ -18,7 +18,9 @@ export default function Login() {
   const [signInWithGoogle, googleUser] = useSignInWithGoogle(auth);
 
   if (user || googleUser) {
-    navigate("/");
+    return setTimeout(() => {
+      navigate("/");
+    }, 500);
   }
 
   if (error) {

@@ -1,20 +1,38 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { auth } from "../../firebase.init";
 import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
+import axios from "axios";
+import "./signup.css";
 
 export default function Signup() {
-  const [username, setUsername] = useState("");
+  const baseurl = "http://localhost:4500";
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [myerror, setMyError] = useState("");
+  const navigate = useNavigate();
 
   const [createUserWithEmailAndPassword, user, loading, error] =
     useCreateUserWithEmailAndPassword(auth);
 
+  const handleCreateUser = async () => {
+    try {
+      let res = await axios.post(`${baseurl}/user/`, {
+        name,
+        email,
+      });
+      return console.log(res);
+    } catch (error) {
+      return console.log(error);
+    }
+  };
+
   if (user) {
-    alert("Login successful");
+    handleCreateUser();
+    console.log("Account created successfully! Please log in.");
+    return setTimeout(() => {
+      navigate("/login");
+    }, 1000);
   }
 
   if (error) {
@@ -31,7 +49,7 @@ export default function Signup() {
   };
 
   return (
-    <div className="d-flex vh-100 w-100">
+    <div className="d-flex vh-100 w-100 loginpage">
       <section className="w-50 bg-danger sideWallpaper"></section>
       <section className="w-50 d-flex justify-content-center align-items-center">
         <form
@@ -42,13 +60,6 @@ export default function Signup() {
             src="https://cdn-icons-png.flaticon.com/128/2111/2111463.png"
             alt=""
             className="w-25"
-          />
-
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Username"
-            onChange={(e) => setUsername(e.target.value)}
           />
           <input
             type="text"
