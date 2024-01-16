@@ -1,6 +1,7 @@
 const express = require('express');
 const multer = require('multer');
 const { postContent, getPost, createComment } = require('../controllers/post.controller');
+const { checkPostingLimit } = require('../middleware/postCountCheck');
 const postRouter = express.Router();
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -15,7 +16,8 @@ const storage = multer.diskStorage({
 })
 
 const upload = multer({ storage: storage })
-postRouter.post('/', upload.single('image'), postContent)
+
+postRouter.post('/', upload.single('image'), checkPostingLimit, postContent);
 postRouter.get('/', getPost);
 postRouter.post('/comment', createComment)
 

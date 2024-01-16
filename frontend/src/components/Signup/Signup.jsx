@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { auth } from "../../firebase.init";
 import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 import axios from "axios";
@@ -10,29 +10,26 @@ export default function Signup() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
+  const [myerror, setMyError] = useState("");
 
   const [createUserWithEmailAndPassword, user, loading, error] =
     useCreateUserWithEmailAndPassword(auth);
 
   const handleCreateUser = async () => {
     try {
-      let res = await axios.post(`${baseurl}/user/`, {
-        name,
+      let res = await axios.post(`${baseurl}/user/register`, {
         email,
+        name,
       });
       return console.log(res);
     } catch (error) {
-      return console.log(error);
+      console.log(error);
     }
   };
 
   if (user) {
     handleCreateUser();
-    console.log("Account created successfully! Please log in.");
-    return setTimeout(() => {
-      navigate("/login");
-    }, 1000);
+    alert("Account created successfully! Please log in.");
   }
 
   if (error) {
@@ -80,21 +77,13 @@ export default function Signup() {
             onChange={(e) => setPassword(e.target.value)}
           />
           <button type="submit" className="btn btn-danger">
-            Login
+            Sign Up
           </button>
 
           <p className="text-center">Or</p>
           <p>
             Already have an account? <Link to="/login">Login</Link>
           </p>
-          <button className="btn btn-primary d-flex justify-content-center align-items-center gap-2">
-            Login with
-            <img
-              src="https://cdn-icons-png.flaticon.com/128/300/300221.png"
-              width={20}
-              alt=""
-            />
-          </button>
         </form>
       </section>
     </div>
