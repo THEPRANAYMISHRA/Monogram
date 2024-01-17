@@ -6,7 +6,8 @@ import axios from "axios";
 import "./signup.css";
 
 export default function Signup() {
-  const baseurl = "http://localhost:4500";
+  const baseurl = "https://monogram.onrender.com";
+  // const baseurl = "http://localhost:4500";
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

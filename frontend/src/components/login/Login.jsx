@@ -10,7 +10,8 @@ import "./login.css";
 
 export default function Login() {
   const navigate = useNavigate();
-  const baseurl = "http://localhost:4500";
+  const baseurl = "https://monogram.onrender.com";
+  // const baseurl = "http://localhost:4500";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -24,7 +25,7 @@ export default function Login() {
     let email = googleUser.user.email;
 
     axios
-      .post(`${baseurl}/user/failedAttempt`, {
+      .post(`${baseurl}/user/register`, {
         name: displayName,
         email: email,
       })
