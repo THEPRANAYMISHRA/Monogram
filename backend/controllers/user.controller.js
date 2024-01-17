@@ -38,9 +38,7 @@ const getUserDetails = async (req, res) => {
         if (!user) {
             return res.status(404).json({ error: 'User not found. Please check your credentials.' });
         }
-        return res.status(200).json({
-            email: user.email
-        })
+        return res.status(200).json(user)
     } catch (error) {
         console.error('Error during login:', error);
         return res.status(500).json({ error: 'Internal Server Error' });

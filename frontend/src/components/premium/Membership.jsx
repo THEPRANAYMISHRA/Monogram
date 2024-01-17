@@ -121,6 +121,7 @@ export default function Membership() {
       let res = await axios.post(`${baseurl}/user/details`, {
         email: user.email,
       });
+      console.log(res.data);
       return setCurrentPlan(res.data.user.membership);
     } catch (error) {
       console.log(error);
