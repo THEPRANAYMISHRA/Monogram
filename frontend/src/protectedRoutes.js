@@ -16,7 +16,6 @@ const ProtectedRoute = ({ children }) => {
         if (user) {
             axios.post(`${baseurl}/user/details`, { email: user.email })
                 .then((res) => {
-                    console.log("User Details", res.data);
                     setUserDetails(res.data);
                 })
                 .catch((error) => {
@@ -28,17 +27,20 @@ const ProtectedRoute = ({ children }) => {
         } else {
             setDetailsLoading(false);
         }
-    }, [userDetails, user]);
+    }, [user]);
 
     if (isLoading || isDetailsLoading) {
         return <PageLoading />;
     }
 
-    if (!user || !userDetails) {
+    if (!user || (!userDetails && isDetailsLoading)) {
         return <Navigate to='/login' />;
     }
 
-    return children;
+    if (user && userDetails) {
+        return children;
+    }
+
 };
 
 export default ProtectedRoute;
