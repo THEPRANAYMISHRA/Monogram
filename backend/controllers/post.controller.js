@@ -3,18 +3,25 @@ const { CommentModel } = require('../models/comment.model');
 
 const postContent = async (req, res) => {
     try {
-        const { title, author } = req.body;
+        const { title, email } = req.body;
+
+        const blockedUser = await BlockedUserModel.findOne({ email });
+
+        if (blockedUser) {
+            return res.status(403).json({ message: 'Account is blocked. Please try again later.' });
+        }
+        // create a new blog post
         if (req.file) {
             const newPost = await PostModel({
                 title: title,
                 imageUrl: `https://monogram.onrender.com/${req.file.filename}`,
-                author: author
+                email: email
             })
             await newPost.save();
         } else {
             const newPost = await PostModel({
                 title: title,
-                author: author
+                email: email
             })
             await newPost.save();
         }

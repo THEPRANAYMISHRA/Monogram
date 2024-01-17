@@ -6,6 +6,7 @@ import "./feed.css";
 import Post from "../post/Post";
 
 export default function Feed() {
+  // const baseurl = "http://localhost:4500";
   const baseurl = "https://monogram.onrender.com";
   const [title, setTitle] = useState("");
   const [image, setImage] = useState(null);
@@ -21,7 +22,7 @@ export default function Feed() {
       try {
         let formData = new FormData();
         formData.append("title", title);
-        formData.append("author", user.email);
+        formData.append("email", user.email);
         if (image !== null) {
           formData.append("image", image);
         }
@@ -33,7 +34,7 @@ export default function Feed() {
         setImage(null);
         setPreviewImage(null);
       } catch (error) {
-        console.error(error);
+        setResponse(error.response);
       } finally {
         setIsUploading(false);
         setTimeout(() => {
@@ -109,7 +110,7 @@ export default function Feed() {
       )}
       <div
         className={
-          resposnse?.status === 400
+          resposnse?.status === 400 || resposnse?.status === 403
             ? "alert alert-danger"
             : resposnse?.status === 200
             ? "alert alert-primary"

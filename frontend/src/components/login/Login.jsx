@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { auth } from "../../firebase.init";
+import axios from "axios";
 import {
   useSignInWithEmailAndPassword,
   useSignInWithGoogle,
@@ -9,6 +10,8 @@ import "./login.css";
 
 export default function Login() {
   const navigate = useNavigate();
+  const baseurl = "https://monogram.onrender.com";
+  // const baseurl = "http://localhost:4500";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -17,14 +20,42 @@ export default function Login() {
 
   const [signInWithGoogle, googleUser] = useSignInWithGoogle(auth);
 
-  if (user || googleUser) {
+  if (googleUser) {
+    let displayName = googleUser.user.displayName;
+    let email = googleUser.user.email;
+
+    axios
+      .post(`${baseurl}/user/register`, {
+        name: displayName,
+        email: email,
+      })
+      .then((res) => {
+        return setTimeout(() => {
+          navigate("/");
+        }, 500);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  if (user) {
     return setTimeout(() => {
       navigate("/");
     }, 500);
   }
 
   if (error) {
-    console.log(error.message);
+    axios
+      .post(`${baseurl}/user/failedAttempt`, {
+        email: email,
+      })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   if (loading) {

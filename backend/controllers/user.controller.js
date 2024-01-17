@@ -1,36 +1,52 @@
 const { UserModel } = require("../models/user.model");
 const Razorpay = require('razorpay');
 const crypto = require("crypto");
+const nodemailer = require('nodemailer')
+require("dotenv").config()
+const { BlockedUserModel } = require("../models/blocked.users");
 
 
 const registerUser = async (req, res) => {
-    const { name, email } = req.body;
     try {
-        let userAlreadyExist = await UserModel.findOne({ email: email })
-        if (userAlreadyExist) {
-            return res.status(403).send({ "message": "email already exist" })
-        } else {
-            let newUser = new UserModel({
-                name: name, email: email
-            })
-            await newUser.save()
-            return res.status(201).send({ "message": "user created" })
-        }
-    } catch (error) {
-        return res.status(400).send({ "error": error })
-    }
-}
+        const { name, email } = req.body;
 
-const getUser = async (req, res) => {
-    const { email } = req.body;
-    try {
-        let user = await UserModel.findOne({ email: email })
-        return res.status(200).send({ "user": user })
+        const userAlreadyExist = await UserModel.findOne({ email });
+
+        if (userAlreadyExist) {
+            return res.status(409).json({ message: "Email already exists" });
+        }
+        const newUser = new UserModel({ name, email });
+        await newUser.save();
+        return res.status(201).json({ message: "Account created" });
     } catch (error) {
-        console.log(error)
-        return res.status(400).send({ "message": "User doesn't exist" })
+        console.error("Error registering user:", error);
+        return res.status(500).json({ error: "Internal Server Error" });
     }
-}
+};
+
+const getUserDetails = async (req, res) => {
+    try {
+        const { email } = req.body;
+
+        const blockedUser = await BlockedUserModel.findOne({ email });
+        if (blockedUser) {
+            return res.status(403).json({ error: 'Account is blocked. Please try again later.' });
+        }
+
+        const user = await UserModel.findOne({ email });
+
+        if (!user) {
+            return res.status(404).json({ error: 'User not found. Please check your credentials.' });
+        }
+        return res.status(200).json({
+            email: user.email
+        })
+    } catch (error) {
+        console.error('Error during login:', error);
+        return res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
 
 const updateMembership = async (req, res) => {
     const { email, plan } = req.body;
@@ -93,8 +109,79 @@ const validateOrder = async (req, res) => {
     }
 }
 
+const blockedUsers = {};
 
+const handleWrongAttemptCount = async (req, res) => {
+    try {
+        let { email } = req.body;
 
+        console.log(blockedUsers)
 
+        if (!blockedUsers[email]) {
+            blockedUsers[email] = { attempts: 1 };
+        } else {
+            blockedUsers[email].attempts++;
 
-module.exports = { registerUser, getUser, updateMembership, makeOrder, validateOrder }
+            // for failed attempts
+            if (blockedUsers[email].attempts >= 3) {
+                sendNotificationEmail(email, 'Consecutive failed login attempts');
+            }
+
+            // for five
+            if (blockedUsers[email].attempts >= 5) {
+                await blockUser(email);
+                delete blockedUsers[email];
+                sendNotificationEmail(email, 'Account blocked due to five consecutive failed login attempts');
+                return res.status(403).json({ message: 'Account is blocked. Please try again later.' });
+            }
+        }
+
+    } catch (error) {
+        console.error('Error handling wrong attempt count:', error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+};
+
+function sendNotificationEmail(email, message) {
+    return new Promise((resolve, reject) => {
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            secure: true,
+            auth: {
+                user: process.env.nodeEmail,
+                pass: process.env.nodemailer
+            }
+        });
+
+        const mailOptions = {
+            from: 'monogram@alert',
+            to: email,
+            subject: 'Security Alert',
+            text: 'Attempt to login',
+            html: `<b>${message}</b>`
+        };
+
+        transporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
+                console.error(error);
+                reject(error);
+            } else {
+                console.log('Email sent: ' + info.response);
+                resolve(info);
+            }
+        });
+    });
+}
+
+async function blockUser(email) {
+    try {
+        let newBlockedUser = new BlockedUserModel({ email });
+        await newBlockedUser.save();
+        return newBlockedUser;
+    } catch (error) {
+        console.error('Error blocking user:', error);
+        throw error;
+    }
+}
+
+module.exports = { registerUser, getUserDetails, updateMembership, makeOrder, validateOrder, handleWrongAttemptCount };
