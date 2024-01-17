@@ -28,7 +28,7 @@ const ProtectedRoute = ({ children }) => {
         } else {
             setDetailsLoading(false);
         }
-    }, [userDetails, user]);
+    }, [user]);
 
     if (isLoading || isDetailsLoading) {
         return <PageLoading />;
