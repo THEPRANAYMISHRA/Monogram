@@ -118,7 +118,7 @@ export default function Membership() {
 
   const handleFetchPlan = async () => {
     try {
-      let res = await axios.post(`${baseurl}/user/find`, {
+      let res = await axios.post(`${baseurl}/user/details`, {
         email: user.email,
       });
       return setCurrentPlan(res.data.user.membership);
