@@ -5,18 +5,18 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 
 export default function Widgets() {
   const [news, setNews] = useState([]);
-  const fetchLatestNews = async () => {
-    try {
-      let res = await axios.get(`https://monogram.onrender.com/news`);
-      // setNews(res.data.);
-      console.log(res);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const fetchLatestNews = async () => {
+  //   try {
+  //     let res = await axios.get(`https://monogram.onrender.com/news`);
+  //     // setNews(res.data.);
+  //     console.log(res);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   useEffect(() => {
-    fetchLatestNews();
+    // fetchLatestNews();
   }, []);
   return (
     <main className="vh-100 w-50 mywidgetsbar">
