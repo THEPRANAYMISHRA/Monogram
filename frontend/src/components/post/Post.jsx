@@ -100,7 +100,7 @@ export default function Post() {
             key={index}
           >
             <div className="d-flex align-items-center gap-2">
-              <i className="bx bxs-user-circle fs-3"></i> {post.author}
+              <i className="bx bxs-user-circle fs-3"></i> {post.email}
             </div>
             <p>{post.title}</p>
             {post.imageUrl && (
