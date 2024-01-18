@@ -5,27 +5,28 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 
 export default function Widgets() {
   const [news, setNews] = useState([]);
-  // const fetchLatestNews = async () => {
-  //   try {
-  //     let res = await axios.get(`https://monogram.onrender.com/news`);
-  //     // setNews(res.data.);
-  //     console.log(res);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+  const fetchLatestNews = async () => {
+    try {
+      let res = await axios.get(
+        `https://newsapi.org/v2/everything?q=tesla&from=2023-12-18&sortBy=publishedAt&apiKey=e96c9a511f734559a4dcecbddfd569e7`
+      );
+      setNews(res.data.articles);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
-    // fetchLatestNews();
+    fetchLatestNews();
   }, []);
   return (
     <main className="vh-100 w-50 mywidgetsbar">
       <div className="d-flex flex-column gap-2 overflow-auto h-100 newsDiv">
-        <p className="fs-1 bg-dark text-light p-2 position-sticky top-0">
+        <h1 className="fs-2 bg-dark text-light p-4 position-sticky top-0">
           Trending
-        </p>
+        </h1>
         {news
-          ? news.map((ele, index) => {
+          ? news?.map((ele, index) => {
               return (
                 <div className="newsCard" key={index}>
                   <LazyLoadImage

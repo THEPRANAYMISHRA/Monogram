@@ -6,10 +6,12 @@ const { postRouter } = require('./routes/post.route');
 const { userRouter } = require('./routes/user.route');
 const app = express()
 app.use(cors())
+app.use(express.json({ extended: false }));
 app.use(express.json())
 app.use(express.static('uploads'))
 
 const { UserModel } = require('./models/user.model');
+const { paymentsRouter } = require('./routes/payments');
 
 // Schedule a job to run every day
 cron.schedule('0 0 * * *', async () => {
@@ -30,6 +32,7 @@ cron.schedule('0 0 * * *', async () => {
 });
 
 
+app.use("/payment", paymentsRouter)
 app.use("/user", userRouter)
 app.use("/post", postRouter)
 app.get("/health", (req, res) => {
