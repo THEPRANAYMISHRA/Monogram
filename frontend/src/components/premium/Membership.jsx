@@ -11,22 +11,6 @@ export default function Membership() {
   const [selectedPlan, setSelectedPlan] = useState();
   const [currentPlan, setCurrentPlan] = useState("Basic");
 
-  // const handleNewMembership = async (e) => {
-  //   e.preventDefault();
-  //   if (!selectedPlan) return;
-  //   try {
-  //     const payload = {
-  //       email: user.email,
-  //       plan: selectedPlan,
-  //     };
-  //     let res = await axios.patch(`${baseurl}/user/order`, payload);
-  //     console.log(res);
-  //     return setCurrentPlan(res.data.user.membership);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
   function loadScript(src) {
     return new Promise((resolve) => {
       const script = document.createElement("script");
@@ -43,20 +27,12 @@ export default function Membership() {
 
   const handleMakeOrder = async (e) => {
     e.preventDefault();
-    const amount = 500;
-    const currency = "INR";
-    const receipt = "order_rcptid_11";
 
     if (!selectedPlan) return;
-    try {
-      const payload = {
-        amount: amount,
-        currency: currency,
-        receipt: receipt,
-      };
-      let resOrder = await axios.post(`${baseurl}/user/order`, payload);
-      ///////////////////
+    if (selectedPlan === "Basic") return;
+    if (selectedPlan === currentPlan) return;
 
+    try {
       const res = await loadScript(
         "https://checkout.razorpay.com/v1/checkout.js"
       );
@@ -66,28 +42,44 @@ export default function Membership() {
         return;
       }
 
+      let result = await axios.post(`${baseurl}/payment/order`, {
+        plan: selectedPlan,
+      });
+
+      console.log("This is order result");
+      console.log(result);
+
+      const { amount, id: order_id, currency } = result.data;
+      ///////////////////
+
       const options = {
-        key: key_sec || "rzp_test_e1P2mhZlev4Ix3",
-        amount,
-        currency,
+        key: key_sec,
+        amount: amount.toString(),
+        currency: currency,
         name: "Monogram",
         description: "Test Transaction",
         image: "https://cdn-icons-png.flaticon.com/128/2111/2111463.png",
-        order_id: resOrder.data.id,
+        order_id: order_id,
         handler: async function (response) {
-          const body = {
-            ...response,
+          const data = {
+            orderCreationId: order_id,
+            razorpayPaymentId: response.razorpay_payment_id,
+            razorpayOrderId: response.razorpay_order_id,
+            razorpaySignature: response.razorpay_signature,
+            userEmail: user.email,
           };
           let successRes = await axios.post(
-            `${baseurl}/user/validate/payment`,
-            body
+            `${baseurl}/payment/validate`,
+            data
           );
-          console.log(successRes);
+          if (successRes) {
+            alert("Payment Successful! membership is updated");
+          } else {
+            alert("Payment failed! try again later");
+          }
         },
         prefill: {
-          name: "",
-          email: "",
-          contact: "",
+          name: "Pranay",
         },
         notes: {
           address: "Razorpay Corporate Office",
@@ -96,8 +88,8 @@ export default function Membership() {
           color: "#3399cc",
         },
       };
-      var rzp1 = new window.Razorpay(options);
 
+      const rzp1 = new window.Razorpay(options);
       rzp1.on("payment.failed", function (response) {
         console.log(
           response.error.code,
@@ -121,8 +113,7 @@ export default function Membership() {
       let res = await axios.post(`${baseurl}/user/details`, {
         email: user.email,
       });
-      console.log(res.data);
-      return setCurrentPlan(res.data.user.membership);
+      return setCurrentPlan(res.data.membership);
     } catch (error) {
       console.log(error);
     }

@@ -1,5 +1,6 @@
 const { PostModel } = require("../models/post.model");
 const { CommentModel } = require('../models/comment.model');
+const { BlockedUserModel } = require("../models/blocked.users");
 
 const postContent = async (req, res) => {
     try {
