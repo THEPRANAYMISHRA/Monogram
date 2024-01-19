@@ -1,15 +1,18 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../../firebase.init";
+import { useUser } from "../../protectedRoutes";
+import "./membership.css";
 
 export default function Membership() {
+  const userDetails = useUser();
   const baseurl = "https://monogram.onrender.com";
   // const baseurl = "http://localhost:4500";
   const key_sec = process.env.REACT_APP_RAZOR;
-  const [user, isLoading] = useAuthState(auth);
+  const [user] = useAuthState(auth);
   const [selectedPlan, setSelectedPlan] = useState();
-  const [currentPlan, setCurrentPlan] = useState("Basic");
+  const [currentPlan] = useState(userDetails.membership);
 
   function loadScript(src) {
     return new Promise((resolve) => {
@@ -108,21 +111,6 @@ export default function Membership() {
     }
   };
 
-  const handleFetchPlan = async () => {
-    try {
-      let res = await axios.post(`${baseurl}/user/details`, {
-        email: user.email,
-      });
-      return setCurrentPlan(res.data.membership);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    handleFetchPlan();
-  }, []);
-
   return (
     <form
       className="d-flex flex-column align-items-center justify-content-center gap-2 w-100 h-100"
@@ -130,7 +118,7 @@ export default function Membership() {
     >
       <p className="fs-1">Memberships</p>
       {/* ////////////////////////// */}
-      <div className="border w-50 rounded">
+      <div className="border w-50 rounded membershipcard-basic">
         <section className="p-3 d-flex rounded gap-2">
           <input
             className="form-check-input"
@@ -143,7 +131,7 @@ export default function Membership() {
           />
           <label className="form-check-label" for="exampleRadios1">
             Free
-            {currentPlan === "Basic" && " (Current)"}
+            {currentPlan === "Basic" && " (Active)"}
           </label>
         </section>
         <ul>
@@ -151,7 +139,7 @@ export default function Membership() {
         </ul>
       </div>
       {/* ////////////////////////// */}
-      <div className="border w-50 rounded">
+      <div className="border w-50 rounded membershipcard-silver">
         <section className="p-3 d-flex rounded gap-2">
           <input
             className="form-check-input"
@@ -164,7 +152,7 @@ export default function Membership() {
           />
           <label className="form-check-label" for="exampleRadios1">
             Silver
-            {currentPlan === "Silver" && " (Current)"}
+            {currentPlan === "Silver" && " (Active)"}
           </label>
         </section>
         <ul>
@@ -172,7 +160,7 @@ export default function Membership() {
         </ul>
       </div>
       {/* ////////////////////////// */}
-      <div className="border w-50 rounded">
+      <div className="border w-50 rounded membershipcard-gold">
         <section className="p-3 d-flex rounded gap-2">
           <input
             className="form-check-input"
@@ -185,7 +173,7 @@ export default function Membership() {
           />
           <label className="form-check-label" for="exampleRadios1">
             Gold
-            {currentPlan === "Gold" && " (Current)"}
+            {currentPlan === "Gold" && " (Active)"}
           </label>
         </section>
         <ul>
