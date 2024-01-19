@@ -1,11 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, createContext, useContext } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "./firebase.init";
 import { Navigate } from "react-router-dom";
 import axios from "axios";
 import PageLoading from "./components/pageLoading/PageLoading";
 
-const ProtectedRoute = ({ children }) => {
+const UserContext = createContext();
+export const useUser = () => useContext(UserContext);
+
+export const ProtectedRoute = ({ children }) => {
     // const baseurl = "http://localhost:4500";
     const baseurl = "https://monogram.onrender.com";
     const [user, isLoading] = useAuthState(auth);
@@ -13,20 +16,20 @@ const ProtectedRoute = ({ children }) => {
     const [userDetails, setUserDetails] = useState(null);
 
     useEffect(() => {
-        if (user) {
-            axios.post(`${baseurl}/user/details`, { email: user.email })
-                .then((res) => {
-                    setUserDetails(res.data);
-                })
-                .catch((error) => {
-                    console.error("Error fetching user details", error);
-                })
-                .finally(() => {
-                    setDetailsLoading(false);
-                });
-        } else {
-            setDetailsLoading(false);
-        }
+        const fetchUserDetails = async () => {
+            try {
+                if (user) {
+                    const response = await axios.post(`${baseurl}/user/details`, { email: user.email });
+                    setUserDetails(response.data);
+                }
+            } catch (error) {
+                console.error("Error fetching user details", error);
+            } finally {
+                setDetailsLoading(false);
+            }
+        };
+
+        fetchUserDetails();
     }, [user]);
 
     if (isLoading || isDetailsLoading) {
@@ -34,13 +37,16 @@ const ProtectedRoute = ({ children }) => {
     }
 
     if (!user || (!userDetails && isDetailsLoading)) {
-        return <Navigate to='/login' />;
+        return <Navigate to="/login" />;
     }
 
     if (user && userDetails) {
-        return children;
+        return (
+            <UserContext.Provider value={userDetails}>
+                {children}
+            </UserContext.Provider>
+        );
     }
 
+    return null;
 };
-
-export default ProtectedRoute;

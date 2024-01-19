@@ -1,0 +1,21 @@
+.membershipcard-basic {
+  background-color: aliceblue !important;
+}
+.membershipcard-silver {
+  background-color: silver !important;
+}
+.membershipcard-gold {
+  background-color: gold !important;
+}
+
+@media screen and (max-width: 1000px) {
+  .membershipcard-basic {
+    width: 90% !important;
+  }
+  .membershipcard-silver {
+    width: 90% !important;
+  }
+  .membershipcard-gold {
+    width: 90% !important;
+  }
+}
