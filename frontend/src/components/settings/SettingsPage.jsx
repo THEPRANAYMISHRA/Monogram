@@ -8,6 +8,8 @@ export default function SettingsPage() {
   const baseurl = "https://monogram.onrender.com";
   const [name, setName] = useState(profileData.name);
   const [updatedProfile, setUpdatedProfile] = useState(false);
+  const [updateProfileError, setUpdateProfileError] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
   const [profilePrivacy, setProfilePrivacy] = useState(
     profileData.profilePrivacy ? profileData.profilePrivacy : "Everyone"
   );
@@ -22,10 +24,15 @@ export default function SettingsPage() {
       setTimeout(() => {
         setUpdatedProfile(false);
       }, 2000);
-      console.log(res);
-      return alert("Profile updated");
+      return console.log(res);
     } catch (error) {
-      return alert("Failed to update profile");
+      setUpdateProfileError(true);
+      setTimeout(() => {
+        setUpdateProfileError(false);
+      }, 2000);
+      return console.log(error);
+    } finally {
+      setIsUpdating(false);
     }
   };
 
@@ -38,6 +45,11 @@ export default function SettingsPage() {
       {updatedProfile && (
         <div class="alert alert-primary w-100" role="alert">
           Profile info is updated!
+        </div>
+      )}
+      {updateProfileError && (
+        <div class="alert alert-danger w-100" role="alert">
+          Profile info is not updated!
         </div>
       )}
       <LazyLoadImage
@@ -104,7 +116,7 @@ export default function SettingsPage() {
         </section>
       </div>
 
-      <button type="submit" className="btn btn-primary">
+      <button type="submit" className="btn btn-primary" disabled={isUpdating}>
         Update
       </button>
     </form>
