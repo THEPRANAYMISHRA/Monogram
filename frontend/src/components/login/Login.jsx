@@ -23,11 +23,13 @@ export default function Login() {
   if (googleUser) {
     let displayName = googleUser.user.displayName;
     let email = googleUser.user.email;
+    let image = googleUser.user.photoURL;
 
     axios
       .post(`${baseurl}/user/register`, {
         name: displayName,
         email: email,
+        imageurl: image,
       })
       .then((res) => {
         return setTimeout(() => {

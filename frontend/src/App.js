@@ -8,15 +8,19 @@ import PageLoading from './components/pageLoading/PageLoading';
 import Explore from './components/explore/Explore';
 import SideBar from './components/sidebar/SideBar';
 import Membership from './components/premium/Membership';
+import ViewProfile from './components/viewUser/ViewProfile';
+import ViewOthers from './components/viewOtherProfiles/ViewOthers';
 
 
 function App() {
   return (
-    <main className='d-flex justify-content-start align-items-center vh-100 '>
+    <main className='d-flex justify-content-start align-items-center vh-100'>
       <Routes>
         <Route path='/' element={<ProtectedRoute><SideBar /><Home /></ProtectedRoute>} />
         <Route path='/explore' element={<ProtectedRoute><SideBar /><Explore /></ProtectedRoute>} />
         <Route path='/membership' element={<ProtectedRoute><SideBar /><Membership /></ProtectedRoute>} />
+        <Route path='/profile' element={<ProtectedRoute><SideBar /><ViewProfile /></ProtectedRoute>} />
+        <Route path='/user' element={<ProtectedRoute><SideBar /><ViewOthers /></ProtectedRoute>} />
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Signup />} />
         <Route path='/loading' element={<PageLoading />} />
