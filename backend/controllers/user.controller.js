@@ -8,14 +8,14 @@ const { BlockedUserModel } = require("../models/blocked.users");
 
 const registerUser = async (req, res) => {
     try {
-        const { name, email } = req.body;
+        const { name, email, imageurl } = req.body;
 
         const userAlreadyExist = await UserModel.findOne({ email });
 
         if (userAlreadyExist) {
             return res.status(409).json({ message: "Email already exists" });
         }
-        const newUser = new UserModel({ name, email });
+        const newUser = new UserModel({ name, email, imageurl });
         await newUser.save();
         return res.status(201).json({ message: "Account created" });
     } catch (error) {

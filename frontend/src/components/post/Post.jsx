@@ -3,6 +3,7 @@ import axios from "axios";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "./posts.css";
 import Cards from "../loadingCards/Cards";
+import { Link } from "react-router-dom";
 
 export default function Post() {
   const baseurl = "https://monogram.onrender.com";
@@ -99,9 +100,13 @@ export default function Post() {
             className="d-flex flex-column w-100 border p-2 rounded gap-2"
             key={index}
           >
-            <div className="d-flex align-items-center gap-2">
+            <Link
+              className="d-flex align-items-center gap-2"
+              to={`/user?q=${post.email}`}
+            >
               <i className="bx bxs-user-circle fs-3"></i> {post.email}
-            </div>
+            </Link>
+
             <p>{post.title}</p>
             {post.imageUrl && (
               <LazyLoadImage

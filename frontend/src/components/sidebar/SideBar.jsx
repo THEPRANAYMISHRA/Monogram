@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 export default function SideBar() {
   return (
-    <div className="vh-100 d-flex flex-column mysidebar align-items-center border p-1">
+    <div className="d-flex flex-column mysidebar align-items-center border p-1">
       <i className="bx bxl-instagram-alt fs-2 py-4 px-2 "></i>
       <span className="fw-bold fs-5">Monogram</span>
       <div className="h-100 w-100 d-flex flex-column gap-3 p-4">
@@ -37,6 +37,10 @@ export default function SideBar() {
           <span>More..</span>
         </button>
       </div>
+      <Link className="btn btn-danger rounded" to="/profile">
+        <i className="bx bxs-user"></i>
+        <span>Profile</span>
+      </Link>
     </div>
   );
 }
