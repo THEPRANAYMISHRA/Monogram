@@ -100,12 +100,14 @@ export default function Post() {
             className="d-flex flex-column w-100 border p-2 rounded gap-2"
             key={index}
           >
-            <Link
-              className="d-flex align-items-center gap-2"
-              to={`/user?q=${post.email}`}
-            >
-              <i className="bx bxs-user-circle fs-3"></i> {post.email}
-            </Link>
+            <section className="d-flex justify-content-between align-items-center">
+              <Link
+                className="d-flex align-items-center gap-2"
+                to={`/search?q=${post.email}`}
+              >
+                <i className="bx bxs-user-circle fs-3"></i> {post.email}
+              </Link>
+            </section>
 
             <p>{post.title}</p>
             {post.imageUrl && (

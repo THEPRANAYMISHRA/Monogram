@@ -10,6 +10,7 @@ import SideBar from './components/sidebar/SideBar';
 import Membership from './components/premium/Membership';
 import ViewProfile from './components/viewUser/ViewProfile';
 import ViewOthers from './components/viewOtherProfiles/ViewOthers';
+import SettingsPage from './components/settings/SettingsPage';
 
 
 function App() {
@@ -20,7 +21,8 @@ function App() {
         <Route path='/explore' element={<ProtectedRoute><SideBar /><Explore /></ProtectedRoute>} />
         <Route path='/membership' element={<ProtectedRoute><SideBar /><Membership /></ProtectedRoute>} />
         <Route path='/profile' element={<ProtectedRoute><SideBar /><ViewProfile /></ProtectedRoute>} />
-        <Route path='/user' element={<ProtectedRoute><SideBar /><ViewOthers /></ProtectedRoute>} />
+        <Route path='/search' element={<ProtectedRoute><SideBar /><ViewOthers /></ProtectedRoute>} />
+        <Route path='/settings' element={<ProtectedRoute><SideBar /><SettingsPage /></ProtectedRoute>} />
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Signup />} />
         <Route path='/loading' element={<PageLoading />} />

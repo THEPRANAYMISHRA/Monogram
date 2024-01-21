@@ -19,7 +19,10 @@ export const ProtectedRoute = ({ children }) => {
         const fetchUserDetails = async () => {
             try {
                 if (user) {
-                    const response = await axios.post(`${baseurl}/user/details`, { email: user.email });
+                    // providing user email as token
+                    const response = await axios.post(`${baseurl}/user/details`, {
+                        tokenEmail: user.email, email: user.email
+                    });
                     setUserDetails(response.data);
                 }
             } catch (error) {
