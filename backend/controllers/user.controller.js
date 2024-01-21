@@ -2,8 +2,10 @@ const { UserModel } = require("../models/user.model");
 const Razorpay = require('razorpay');
 const crypto = require("crypto");
 const nodemailer = require('nodemailer')
+const jwt = require('jsonwebtoken');
 require("dotenv").config()
 const { BlockedUserModel } = require("../models/blocked.users");
+
 
 
 const registerUser = async (req, res) => {
@@ -26,6 +28,47 @@ const registerUser = async (req, res) => {
 
 const getUserDetails = async (req, res) => {
     try {
+        const { tokenEmail, email } = req.body;
+        const blockedUser = await BlockedUserModel.findOne({ tokenEmail });
+        if (blockedUser) {
+            return res.status(403).json({ error: 'Account is blocked. Please try again later.' });
+        }
+        if (tokenEmail !== email) {
+            const user = await UserModel.findOne({ email });
+            if (!user) {
+                return res.status(404).json({ error: 'User not found. Please check your credentials.' });
+            } else {
+                if (user.profilePrivacy === "Everyone") {
+                    return res.status(200).json(user)
+                } else if (user.profilePrivacy === "Nobody") {
+                    delete user[imageurl]
+                    return res.status(200).json(user)
+                } else {
+                    if (user[followers][tokenEmail]) {
+                        return res.status(200).json(user)
+                    } else {
+                        delete user[imageurl]
+                        return res.status(200).json(user)
+                    }
+                }
+            }
+
+        } else {
+            const user = await UserModel.findOne({ email });
+            return res.status(200).json(user)
+        }
+
+
+
+        return res.status(200).json(user)
+    } catch (error) {
+        console.error('Error during login:', error);
+        return res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
+const updateUserDetails = async () => {
+    try {
         const { email } = req.body;
 
         const blockedUser = await BlockedUserModel.findOne({ email });
@@ -38,12 +81,19 @@ const getUserDetails = async (req, res) => {
         if (!user) {
             return res.status(404).json({ error: 'User not found. Please check your credentials.' });
         }
+        // Update the fields that are passed in the request body
+        for (let key in req.body) {
+            if (key !== "email" || key !== 'membership') {
+                user[key] = req.body[key];
+            }
+        }
+        await user.save();
         return res.status(200).json(user)
     } catch (error) {
         console.error('Error during login:', error);
         return res.status(500).json({ error: 'Internal Server Error' });
     }
-};
+}
 
 
 const updateMembership = async (req, res) => {
@@ -144,4 +194,4 @@ async function blockUser(email) {
     }
 }
 
-module.exports = { registerUser, getUserDetails, updateMembership, handleWrongAttemptCount };
+module.exports = { registerUser, getUserDetails, updateMembership, handleWrongAttemptCount, updateUserDetails };
