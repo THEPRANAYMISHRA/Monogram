@@ -48,6 +48,8 @@ const getUserDetails = async (req, res) => {
                 } else if (user.profilePrivacy !== "Everyone" && !user.followers[tokenEmail]) {
                     delete user['imageurl'];
                 }
+
+                return res.status(200).json(user);
             }
         } else {
             user = await UserModel.findOne({ email });
