@@ -14,7 +14,8 @@ export default function SettingsPage() {
     profileData.profilePrivacy ? profileData.profilePrivacy : "Everyone"
   );
 
-  const handleUpdateUserDetails = async () => {
+  const handleUpdateUserDetails = async (e) => {
+    e.preventDefault();
     try {
       let res = await axios.patch(`${baseurl}/user/update/details`, {
         name,
