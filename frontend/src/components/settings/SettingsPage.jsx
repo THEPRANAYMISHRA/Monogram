@@ -40,7 +40,7 @@ export default function SettingsPage() {
   return (
     <form
       className="h-100 w-100 d-flex flex-column align-items-start gap-2 justify-content-start px-5 py-2"
-      onSubmit={handleUpdateUserDetails}
+      onSubmit={(e) => handleUpdateUserDetails(e)}
     >
       <p className="fs-1">Settings</p>
       {updatedProfile && (
