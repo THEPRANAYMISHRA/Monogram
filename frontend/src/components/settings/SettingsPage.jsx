@@ -17,10 +17,11 @@ export default function SettingsPage() {
   const handleUpdateUserDetails = async (e) => {
     e.preventDefault();
     try {
-      let res = await axios.patch(`${baseurl}/user/update/details`, {
+      const payload = {
         name,
         profilePrivacy,
-      });
+      };
+      let res = await axios.patch(`${baseurl}/user/update/details`, payload);
       setUpdatedProfile(true);
       setTimeout(() => {
         setUpdatedProfile(false);

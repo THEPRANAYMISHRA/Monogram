@@ -29,45 +29,40 @@ const registerUser = async (req, res) => {
 const getUserDetails = async (req, res) => {
     try {
         const { tokenEmail, email } = req.body;
+
         const blockedUser = await BlockedUserModel.findOne({ tokenEmail });
         if (blockedUser) {
             return res.status(403).json({ error: 'Account is blocked. Please try again later.' });
         }
+
+        let user;
+
         if (tokenEmail !== email) {
-            const user = await UserModel.findOne({ email });
+            user = await UserModel.findOne({ email });
+
             if (!user) {
                 return res.status(404).json({ error: 'User not found. Please check your credentials.' });
             } else {
-                if (user.profilePrivacy === "Everyone") {
-                    return res.status(200).json(user)
-                } else if (user.profilePrivacy === "Nobody") {
-                    delete user[imageurl]
-                    return res.status(200).json(user)
-                } else {
-                    if (user[followers][tokenEmail]) {
-                        return res.status(200).json(user)
-                    } else {
-                        delete user[imageurl]
-                        return res.status(200).json(user)
-                    }
+                if (user.profilePrivacy === "Nobody") {
+                    delete user['imageurl'];
+                } else if (user.profilePrivacy !== "Everyone" && !user.followers[tokenEmail]) {
+                    delete user['imageurl'];
                 }
             }
-
         } else {
-            const user = await UserModel.findOne({ email });
-            return res.status(200).json(user)
+            user = await UserModel.findOne({ email });
         }
 
+        return res.status(200).json(user);
 
-
-        return res.status(200).json(user)
     } catch (error) {
-        console.error('Error during login:', error);
-        return res.status(500).json({ error: 'Internal Server Error' });
+        console.error('Error during getUserDetails:', error);
+        return res.status(500).json({ error: 'Failed to get user details.' });
     }
 };
 
-const updateUserDetails = async () => {
+
+const updateUserDetails = async (req, res) => {
     try {
         const { email } = req.body;
 
@@ -81,19 +76,22 @@ const updateUserDetails = async () => {
         if (!user) {
             return res.status(404).json({ error: 'User not found. Please check your credentials.' });
         }
+
         // Update the fields that are passed in the request body
         for (let key in req.body) {
-            if (key !== "email" || key !== 'membership') {
+            if (key !== "email" && key !== 'membership') {
                 user[key] = req.body[key];
             }
         }
+
         await user.save();
-        return res.status(200).json(user)
+        return res.status(200).json(user);
     } catch (error) {
-        console.error('Error during login:', error);
-        return res.status(500).json({ error: 'Internal Server Error' });
+        console.error('Error during update:', error);
+        return res.status(500).json({ error: 'Failed to update user details.' });
     }
-}
+};
+
 
 
 const updateMembership = async (req, res) => {
