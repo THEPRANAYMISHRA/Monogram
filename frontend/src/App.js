@@ -8,7 +8,7 @@ import PageLoading from './components/pageLoading/PageLoading';
 import Explore from './components/explore/Explore';
 import SideBar from './components/sidebar/SideBar';
 import Membership from './components/premium/Membership';
-import ViewProfile from './components/viewUser/ViewProfile';
+import ViewProfile from './components/viewMyProfile/ViewProfile';
 import ViewOthers from './components/viewOtherProfiles/ViewOthers';
 import SettingsPage from './components/settings/SettingsPage';
 
