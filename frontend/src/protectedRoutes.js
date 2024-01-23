@@ -9,8 +9,8 @@ const UserContext = createContext();
 export const useUser = () => useContext(UserContext);
 
 export const ProtectedRoute = ({ children }) => {
-    // const baseurl = "http://localhost:4500";
-    const baseurl = "https://monogram.onrender.com";
+    const baseurl = "http://localhost:4500";
+    // const baseurl = "https://monogram.onrender.com";
     const [user, isLoading] = useAuthState(auth);
     const [isDetailsLoading, setDetailsLoading] = useState(true);
     const [userDetails, setUserDetails] = useState(null);
@@ -20,10 +20,10 @@ export const ProtectedRoute = ({ children }) => {
             try {
                 if (user) {
                     // providing user email as token
-                    const response = await axios.post(`${baseurl}/user/details`, {
+                    const payload = {
                         tokenEmail: user.email, email: user.email
-                    });
-                    console.log(response.data)
+                    }
+                    const response = await axios.post(`${baseurl}/user/details`, payload);
                     setUserDetails(response.data);
                 }
             } catch (error) {
