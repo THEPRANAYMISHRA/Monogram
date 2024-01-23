@@ -7,6 +7,8 @@ export default function ViewProfile() {
   const profileData = useUser();
   const [renderJsx, setRenderJsx] = useState();
 
+  console.log(profileData);
+
   const onShowPosts = () => {
     let str = "Posts";
     setRenderJsx(str);
@@ -30,10 +32,10 @@ export default function ViewProfile() {
             width={70}
           />
           <section className="d-flex flex-column align-items-start ">
-            <span className="fs-4">{profileData.name}</span>
-            <span className="fs-6 text-secondary">{profileData.email}</span>
+            <span className="fs-4">{profileData?.name}</span>
+            <span className="fs-6 text-secondary">{profileData?.email}</span>
             <span className="fs-6">
-              {profileData?.followers?.count ? profileData.followers.count : 10}{" "}
+              {profileData?.followersCount ? profileData.followersCount : 0}{" "}
               followers
             </span>
           </section>

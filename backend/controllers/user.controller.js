@@ -36,7 +36,7 @@ const getUserDetails = async (req, res) => {
         }
 
         let user;
-
+        // differentiating between owner and other user using the token email
         if (tokenEmail !== email) {
             user = await UserModel.findOne({ email });
 
@@ -53,10 +53,8 @@ const getUserDetails = async (req, res) => {
             }
         } else {
             user = await UserModel.findOne({ email });
+            return res.status(200).json(user);
         }
-
-        return res.status(200).json({ name: user });
-
     } catch (error) {
         console.error('Error during getUserDetails:', error);
         return res.status(500).json({ error: 'Failed to get user details.' });
