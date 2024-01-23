@@ -68,8 +68,7 @@ export default function ViewOthers() {
             <span className="fs-4">{userData?.name}</span>
             <span className="fs-6 text-secondary">{queryThisUser}</span>
             <span className="fs-6">
-              {userData?.followers?.count ? userData.followers.count : 10}{" "}
-              followers
+              {userData?.followersCount ? userData.followersCount : 0} followers
             </span>
           </section>
         </div>

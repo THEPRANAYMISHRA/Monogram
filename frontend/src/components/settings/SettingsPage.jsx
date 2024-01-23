@@ -6,6 +6,7 @@ import axios from "axios";
 export default function SettingsPage() {
   const profileData = useUser();
   const baseurl = "https://monogram.onrender.com";
+  // const baseurl = "http://localhost:4500";
   const [name, setName] = useState(profileData.name);
   const [updatedProfile, setUpdatedProfile] = useState(false);
   const [updateProfileError, setUpdateProfileError] = useState(false);
@@ -20,7 +21,10 @@ export default function SettingsPage() {
       const payload = {
         name,
         profilePrivacy,
+        email: profileData.email,
       };
+
+      console.log(payload);
       let res = await axios.patch(`${baseurl}/user/update/details`, payload);
       setUpdatedProfile(true);
       setTimeout(() => {

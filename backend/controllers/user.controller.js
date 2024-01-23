@@ -43,19 +43,19 @@ const getUserDetails = async (req, res) => {
             if (!user) {
                 return res.status(404).json({ error: 'User not found. Please check your credentials.' });
             } else {
+                let modifiedUser;
                 if (user.profilePrivacy === "Nobody") {
-                    delete user['imageurl'];
+                    modifiedUser = { name: user.name, email: user.email, membership: user.membership, followersCount: user.followersCount };
                 } else if (user.profilePrivacy !== "Everyone" && !user.followers[tokenEmail]) {
-                    delete user['imageurl'];
+                    modifiedUser = { name: user.name, email: user.email, membership: user.membership, followersCount: user.followersCount };
                 }
-
-                return res.status(200).json(user);
+                return res.status(200).json(modifiedUser);
             }
         } else {
             user = await UserModel.findOne({ email });
         }
 
-        return res.status(200).json(user);
+        return res.status(200).json({ name: user });
 
     } catch (error) {
         console.error('Error during getUserDetails:', error);
@@ -69,10 +69,10 @@ const updateUserDetails = async (req, res) => {
         const { email } = req.body;
 
         const blockedUser = await BlockedUserModel.findOne({ email });
+
         if (blockedUser) {
             return res.status(403).json({ error: 'Account is blocked. Please try again later.' });
         }
-
         const user = await UserModel.findOne({ email });
 
         if (!user) {
@@ -85,7 +85,6 @@ const updateUserDetails = async (req, res) => {
                 user[key] = req.body[key];
             }
         }
-
         await user.save();
         return res.status(200).json(user);
     } catch (error) {
