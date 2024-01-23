@@ -21,7 +21,7 @@ export default function ViewProfile() {
         <div className="d-flex profile-picture gap-3 align-items-center">
           <LazyLoadImage
             src={
-              profileData.imageurl
+              profileData?.imageurl
                 ? profileData.imageurl
                 : "https://cdn-icons-png.flaticon.com/128/3177/3177440.png"
             }
