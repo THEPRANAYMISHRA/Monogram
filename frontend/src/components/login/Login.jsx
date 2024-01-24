@@ -53,6 +53,7 @@ export default function Login() {
         email: email,
       })
       .then((res) => {
+        alert(res);
         console.log(res);
       })
       .catch((err) => {
@@ -98,7 +99,7 @@ export default function Login() {
             placeholder="Password"
             onChange={(e) => setPassword(e.target.value)}
           />
-          <button type="submit" className="btn btn-danger">
+          <button type="submit" className="btn btn-danger" disabled={loading}>
             Login
           </button>
 

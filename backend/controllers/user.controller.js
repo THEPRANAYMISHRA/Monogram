@@ -15,7 +15,7 @@ const registerUser = async (req, res) => {
         const userAlreadyExist = await UserModel.findOne({ email });
 
         if (userAlreadyExist) {
-            return res.status(409).json({ message: "Email already exists" });
+            return res.json({ message: "Email already exists" });
         }
         const newUser = new UserModel({ name, email, imageurl });
         await newUser.save();
@@ -131,7 +131,7 @@ const handleWrongAttemptCount = async (req, res) => {
 
             // for failed attempts
             if (blockedUsers[email].attempts >= 3) {
-                sendNotificationEmail(email, 'Consecutive failed login attempts');
+                sendNotificationEmail(email, 'Three consecutive failed login attempts to your account');
             }
 
             // for five
@@ -165,7 +165,10 @@ function sendNotificationEmail(email, message) {
             to: email,
             subject: 'Security Alert',
             text: 'Attempt to login',
-            html: `<b>${message}</b>`
+            html: `<b>${message}</b>
+            <p>
+            If you did not make this request please change the password immediately and contact support.
+            </p>`
         };
 
         transporter.sendMail(mailOptions, function (error, info) {
