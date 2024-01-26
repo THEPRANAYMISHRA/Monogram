@@ -51,14 +51,11 @@ export default function Signup() {
       <section className="w-50 bg-danger sideWallpaper"></section>
       <section className="w-50 d-flex justify-content-center align-items-center">
         <form
-          className="w-50 border d-flex justify-content-start align-items-center flex-column gap-3 p-3 rounded"
+          className="w-50 border d-flex justify-content-start align-items-start flex-column gap-3 p-3 rounded"
           onSubmit={handleSubmitForm}
         >
-          <img
-            src="https://cdn-icons-png.flaticon.com/128/2111/2111463.png"
-            alt=""
-            className="w-25"
-          />
+          <i className="bx bxl-twitter fs-1 text-primary"></i>
+          <h1 className="h1">Happening now</h1>
           <input
             type="text"
             className="form-control"
@@ -77,11 +74,11 @@ export default function Signup() {
             placeholder="Password"
             onChange={(e) => setPassword(e.target.value)}
           />
-          <button type="submit" className="btn btn-danger">
+          <button type="submit" className="btn btn-primary w-100">
             Sign Up
           </button>
 
-          <p className="text-center">Or</p>
+          <hr className="border border-dark border-1 opacity-100 w-100"></hr>
           <p>
             Already have an account? <Link to="/login">Login</Link>
           </p>
