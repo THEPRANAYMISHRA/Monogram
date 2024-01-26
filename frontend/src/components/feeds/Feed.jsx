@@ -59,18 +59,22 @@ export default function Feed() {
 
   return (
     <div className="h-100 w-75 d-flex flex-column myfeeds">
-      <form className="d-flex gap-2 p-4" onSubmit={handlePostSubmit}>
+      <h6 className="w-100 px-3 pt-3 h2">Home</h6>
+      <form
+        className="d-flex gap-1 p-3 bg-primary border-bottom"
+        onSubmit={handlePostSubmit}
+      >
         <input
           type="text"
-          placeholder="Write Something..."
+          placeholder="Whats happening ?"
           className="form-control"
           onChange={(e) => setTitle(e.target.value)}
         />
         <label
           htmlFor="file-upload"
-          className="custom-file-upload btn btn-warning"
+          className="custom-file-upload btn btn-light"
         >
-          <i className="bx bx-plus"></i>
+          <i class="bx bxs-camera-plus"></i>
         </label>
         <input
           id="file-upload"
@@ -88,7 +92,7 @@ export default function Feed() {
               <div></div>
             </div>
           ) : (
-            "Post"
+            "Tweet"
           )}
         </button>
       </form>

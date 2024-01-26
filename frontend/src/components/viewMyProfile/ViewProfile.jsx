@@ -41,14 +41,14 @@ export default function ViewProfile() {
           </section>
         </div>
         {/* options for switching posts and followers */}
-        <section className="d-flex gap-3">
-          <button className="btn btn-light" onClick={onShowPosts}>
+        <section className="d-flex gap-3 p-1">
+          <button className="btn btn-primary" onClick={onShowPosts}>
             Posts
           </button>
-          <button className="btn btn-light" onClick={onShowFollowers}>
+          <button className="btn btn-primary" onClick={onShowFollowers}>
             Followers
           </button>
-          <Link className="btn btn-light" to="/settings">
+          <Link className="btn btn-primary" to="/settings">
             <i class="bx bxs-cog"></i>
           </Link>
         </section>

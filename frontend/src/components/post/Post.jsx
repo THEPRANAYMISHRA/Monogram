@@ -102,14 +102,14 @@ export default function Post() {
           >
             <section className="d-flex justify-content-between align-items-center">
               <Link
-                className="d-flex align-items-center gap-2"
+                className="d-flex align-items-center gap-2 text-decoration-none text-dark"
                 to={`/search?q=${post.email}`}
               >
                 <i className="bx bxs-user-circle fs-3"></i> {post.email}
               </Link>
             </section>
 
-            <p>{post.title}</p>
+            <p className="p-2">{post.title}</p>
             {post.imageUrl && (
               <LazyLoadImage
                 src={post.imageUrl}

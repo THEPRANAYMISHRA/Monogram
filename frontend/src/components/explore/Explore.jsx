@@ -35,7 +35,7 @@ export default function Explore() {
   }, [query]);
 
   return (
-    <main className="w-100 vh-100 p-4 d-flex flex-column gap-3">
+    <main className="w-100 vh-100 p-3 d-flex flex-column gap-2">
       <p className="fs-1">Explore</p>
       <input
         type="text"
