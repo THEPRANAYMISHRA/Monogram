@@ -7,11 +7,12 @@ import "./membership.css";
 
 export default function Membership() {
   const userDetails = useUser();
-  // const baseurl = "https://monogram.onrender.com";
-  const baseurl = "http://localhost:4500";
+  const baseurl = "https://monogram.onrender.com";
+  // const baseurl = "http://localhost:4500";
   const key_sec = process.env.REACT_APP_RAZOR;
   const [user] = useAuthState(auth);
   const [selectedPlan, setSelectedPlan] = useState();
+  const [isMakingPayment, setIsMakingPayment] = useState(false);
   const [currentPlan] = useState(userDetails.membership);
 
   function loadScript(src) {
@@ -30,7 +31,7 @@ export default function Membership() {
 
   const handleMakeOrder = async (e) => {
     e.preventDefault();
-
+    setIsMakingPayment(true);
     if (!selectedPlan) return;
     if (selectedPlan === "Basic") return;
     if (selectedPlan === currentPlan) return;
@@ -108,6 +109,8 @@ export default function Membership() {
       e.preventDefault();
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsMakingPayment(false);
     }
   };
 
@@ -181,8 +184,12 @@ export default function Membership() {
         </ul>
       </div>
 
-      <button type="submit" className="btn btn-primary">
-        Pay
+      <button
+        type="submit"
+        className="btn btn-primary"
+        disabled={isMakingPayment}
+      >
+        {isMakingPayment ? "Wait.." : "Pay"}
       </button>
     </form>
   );
