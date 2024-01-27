@@ -75,7 +75,7 @@ export default function ViewOthers() {
         {/* options for switching posts and followers */}
         <section className="d-flex gap-3">
           <button className="btn btn-light">
-            <i class="bx bxs-user-plus"></i>
+            <i className="bx bxs-user-plus"></i>
             {FollowingUser ? "Following" : "Follow"}
           </button>
         </section>
