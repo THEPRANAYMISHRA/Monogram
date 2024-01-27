@@ -49,7 +49,7 @@ export default function ViewProfile() {
             Followers
           </button>
           <Link className="btn btn-primary" to="/settings">
-            <i class="bx bxs-cog"></i>
+            <i className="bx bxs-cog"></i>
           </Link>
         </section>
       </div>

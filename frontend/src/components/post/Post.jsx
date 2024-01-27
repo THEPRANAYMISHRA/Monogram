@@ -8,44 +8,13 @@ import { Link } from "react-router-dom";
 export default function Post() {
   const baseurl = "https://monogram.onrender.com";
   // const baseurl = "http://localhost:4500";
-  const [posts, setPosts] = useState(null);
-  const [isLoading, setIsLoading] = useState(null);
+  const [posts, setPosts] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(null);
-  const [commentBox, setCommentBox] = useState(null);
-  const [commentInput, setCommentInput] = useState(null);
-  const sectionRef = useRef(null);
-
-  const fetchPosts = async () => {
-    try {
-      setIsLoading(true);
-      let res = await axios.get(`${baseurl}/post/?page=${page}`);
-      if (posts) {
-        setPosts((prev) => [...prev, ...res.data.data]);
-        setTotalPages(res.data.totalPages);
-      } else {
-        setPosts(res.data.data);
-      }
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handelInfiniteScroll = async () => {
-    try {
-      const section = sectionRef.current;
-      if (
-        section.scrollTop + section.offsetHeight + 1 >=
-        section.scrollHeight
-      ) {
-        page < totalPages && setPage((prev) => prev + 1);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const [totalPages, setTotalPages] = useState(0);
+  const [commentBox, setCommentBox] = useState([]);
+  const [commentInput, setCommentInput] = useState("");
+  const sectionRef = useRef();
 
   const handlePostLike = () => {
     console.log("Clicked like button");
@@ -66,10 +35,41 @@ export default function Post() {
     }
   };
 
+  // for fetching posts
+  const fetchPosts = async () => {
+    try {
+      setIsLoading(true);
+      let res = await axios.get(`${baseurl}/post/?page=${page}`);
+      if (posts.length > 0) {
+        setPosts((prev) => [...prev, ...res.data.data]);
+        setTotalPages(res.data.totalPages);
+      } else {
+        setTotalPages(res.data.totalPages);
+        setPosts(res.data.data);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleInfiniteScroll = () => {
+    try {
+      const section = sectionRef.current;
+      if (
+        section.scrollTop + section.offsetHeight + 1 >=
+        section.scrollHeight
+      ) {
+        setPage((prev) => prev + 1);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
-    if (totalPages === page) {
-      return;
-    } else {
+    if (!totalPages || totalPages >= page) {
       fetchPosts();
     }
   }, [page]);
@@ -77,11 +77,11 @@ export default function Post() {
   useEffect(() => {
     const section = sectionRef.current;
     if (section) {
-      section.addEventListener("scroll", handelInfiniteScroll);
+      section.addEventListener("scroll", handleInfiniteScroll);
     }
     return () => {
       if (section) {
-        section.removeEventListener("scroll", handelInfiniteScroll);
+        section.removeEventListener("scroll", handleInfiniteScroll);
       }
     };
   }, []);

@@ -49,12 +49,12 @@ export default function SettingsPage() {
     >
       <p className="fs-1">Settings</p>
       {updatedProfile && (
-        <div class="alert alert-primary w-100" role="alert">
+        <div className="alert alert-primary w-100" role="alert">
           Profile info is updated!
         </div>
       )}
       {updateProfileError && (
-        <div class="alert alert-danger w-100" role="alert">
+        <div className="alert alert-danger w-100" role="alert">
           Profile info is not updated!
         </div>
       )}
