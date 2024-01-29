@@ -15,6 +15,20 @@
   text-decoration: none;
 }
 
+.active {
+  outline: none;
+  padding: 1rem;
+  border: none;
+  cursor: pointer;
+  border-radius: 2rem;
+  font-size: 1rem;
+  transition: 300ms ease-in-out;
+  color: #000000;
+  text-decoration: none;
+  background-color: #1da1f2;
+  color: white;
+}
+
 .myProfileButton {
   outline: none;
   padding: 1rem;
