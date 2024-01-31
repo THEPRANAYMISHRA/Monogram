@@ -40,7 +40,7 @@ export const ProtectedRoute = ({ children }) => {
         return <PageLoading />;
     }
 
-    if (!user || (!userDetails && isDetailsLoading)) {
+    if (!user || (!userDetails && !isDetailsLoading)) {
         return <Navigate to="/login" />;
     }
 

@@ -43,13 +43,13 @@ const getUserDetails = async (req, res) => {
             if (!user) {
                 return res.status(404).json({ error: 'User not found. Please check your credentials.' });
             } else {
-                let modifiedUser;
-                if (user.profilePrivacy === "Nobody") {
-                    modifiedUser = { name: user.name, email: user.email, membership: user.membership, followersCount: user.followersCount };
-                } else if (user.profilePrivacy !== "Everyone" && !user.followers[tokenEmail]) {
-                    modifiedUser = { name: user.name, email: user.email, membership: user.membership, followersCount: user.followersCount };
+                let modifiedUser = { name: user.name, email: user.email, membership: user.membership, followersCount: user.followersCount };
+
+                if (user.profilePrivacy === "Nobody" || (user.profilePrivacy !== "Everyone" && !user.followers[tokenEmail])) {
+                    return res.status(200).json(modifiedUser);
+                } else {
+                    return res.status(200).json(user);
                 }
-                return res.status(200).json(modifiedUser);
             }
         } else {
             user = await UserModel.findOne({ email });
@@ -130,12 +130,12 @@ const handleWrongAttemptCount = async (req, res) => {
             blockedUsers[email].attempts++;
 
             // for failed attempts
-            if (blockedUsers[email].attempts >= 3) {
-                sendNotificationEmail(email, 'Three consecutive failed login attempts to your account');
+            if (blockedUsers[email].attempts === 3) {
+                return sendNotificationEmail(email, 'Three consecutive failed login attempts to your account');
             }
 
             // for five
-            if (blockedUsers[email].attempts >= 5) {
+            if (blockedUsers[email].attempts === 5) {
                 await blockUser(email);
                 delete blockedUsers[email];
                 sendNotificationEmail(email, 'Account blocked due to five consecutive failed login attempts');
