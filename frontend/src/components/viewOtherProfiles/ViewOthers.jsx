@@ -22,6 +22,7 @@ export default function ViewOthers() {
         tokenEmail: profileData.email,
         email: query,
       });
+      console.log(response);
       setUserData(response.data);
     } catch (error) {
       console.error("Error fetching user details", error);
