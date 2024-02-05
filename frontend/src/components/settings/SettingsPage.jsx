@@ -9,9 +9,12 @@ export default function SettingsPage() {
   // const baseurl = "http://localhost:4500";
   const [name, setName] = useState(profileData.name);
   const [profilePreviewImage, setProfilePreviewImage] = useState(
-    profileData.imageurl
+    profileData.profilePhoto
   );
-  const [coverPreviewImage, setCoverPreviewImage] = useState(null);
+  const [coverPreviewImage, setCoverPreviewImage] = useState(
+    profileData.coverPhoto
+  );
+  const IMAGEBB_KEY = process.env.REACT_APP_IMAGEBB_KEY;
   const [updatedProfile, setUpdatedProfile] = useState(false);
   const [updateProfileError, setUpdateProfileError] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
@@ -26,7 +29,7 @@ export default function SettingsPage() {
       let formdata = new FormData();
       formdata.append("image", image);
       let imgres = await axios.post(
-        `https://api.imgbb.com/1/upload?expiration=600&key=39be56849037af1cf4f98035cc86d953`,
+        `https://api.imgbb.com/1/upload?key=${IMAGEBB_KEY}`,
         formdata
       );
       setCoverPreviewImage(imgres.data.data.url);
@@ -54,7 +57,7 @@ export default function SettingsPage() {
       let formdata = new FormData();
       formdata.append("image", image);
       let imgres = await axios.post(
-        `https://api.imgbb.com/1/upload?expiration=600&key=39be56849037af1cf4f98035cc86d953`,
+        `https://api.imgbb.com/1/upload?key=${IMAGEBB_KEY}`,
         formdata
       );
       setProfilePreviewImage(imgres.data.data.url);
@@ -125,10 +128,7 @@ export default function SettingsPage() {
       {/* //cover view */}
       <section className="w-100 h-25 d-flex flex-column p-1 gap-1">
         <LazyLoadImage
-          src={
-            profileData.coverimageurl ||
-            "https://images.pexels.com/photos/414612/pexels-photo-414612.jpeg?cs=srgb&dl=pexels-james-wheeler-414612.jpg&fm=jpg"
-          }
+          src={coverPreviewImage}
           alt="cover image"
           className="img-fluid border w-100 h-75 object-fit-cover"
         />
@@ -143,7 +143,7 @@ export default function SettingsPage() {
         />
       </section>
       {/* profile section */}
-      <section className="d-flex justify-content-start align-items-center w-100 gap-1 p-1 border">
+      <section className="d-flex justify-content-start align-items-center w-100 gap-1 p-1">
         <LazyLoadImage
           src={profilePreviewImage}
           alt="Profile"

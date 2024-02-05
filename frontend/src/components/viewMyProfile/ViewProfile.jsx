@@ -19,17 +19,26 @@ export default function ViewProfile() {
   };
   return (
     <div className="h-100 w-100">
-      <div className="border d-flex flex-column justify-content-center px-3 py-1 h-25 gap-2">
-        <div className="d-flex profile-picture gap-3 align-items-center">
+      <div className="border d-flex flex-column justify-content-center px-3 py-1 h-50">
+        <LazyLoadImage
+          src={
+            profileData?.coverPhoto
+              ? profileData.coverPhoto
+              : "https://www.survivorsuk.org/wp-content/uploads/2017/01/no-image.jpg"
+          }
+          className="h-50 w-100 object-fit-cover"
+          alt={"cover"}
+        />
+        <div className="d-flex profile-picture gap-3 align-items-center h-50">
           <LazyLoadImage
             src={
-              profileData?.imageurl
-                ? profileData.imageurl
+              profileData?.profilePhoto
+                ? profileData.profilePhoto
                 : "https://cdn-icons-png.flaticon.com/128/3177/3177440.png"
             }
             alt="Profile"
             className="img-fluid rounded-circle"
-            width={70}
+            width={100}
           />
           <section className="d-flex flex-column align-items-start ">
             <span className="fs-4">{profileData?.name}</span>
@@ -54,7 +63,7 @@ export default function ViewProfile() {
         </section>
       </div>
       {/* show here posts and followers */}
-      <section className="overflow-auto h-75 px-3 py-1 border">
+      <section className="overflow-auto h-50 px-3 py-1 border">
         {renderJsx}
       </section>
     </div>
