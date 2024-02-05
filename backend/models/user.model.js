@@ -3,7 +3,8 @@ const mongoose = require('mongoose')
 const userSchema = mongoose.Schema({
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
-    imageurl: { type: String, default: "https://cdn-icons-png.flaticon.com/128/3177/3177440.png" },
+    profilePhoto: { type: String, default: "https://cdn-icons-png.flaticon.com/128/3177/3177440.png" },
+    coverPhoto: { type: String, default: "https://cdn-icons-png.flaticon.com/128/3177/3177440.png" },
     membership: { type: String, required: true, default: "Basic" },
     profilePrivacy: {
         type: String,
