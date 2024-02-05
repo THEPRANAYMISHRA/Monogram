@@ -4,7 +4,7 @@ const { BlockedUserModel } = require("../models/blocked.users");
 
 const postContent = async (req, res) => {
     try {
-        const { title, email } = req.body;
+        const { title, email, imageUrl } = req.body;
 
         const blockedUser = await BlockedUserModel.findOne({ email });
 
@@ -12,20 +12,12 @@ const postContent = async (req, res) => {
             return res.status(403).json({ message: 'Account is blocked. Please try again later.' });
         }
         // create a new blog post
-        if (req.file) {
-            const newPost = await PostModel({
-                title: title,
-                imageUrl: `https://monogram.onrender.com/${req.file.filename}`,
-                email: email
-            })
-            await newPost.save();
-        } else {
-            const newPost = await PostModel({
-                title: title,
-                email: email
-            })
-            await newPost.save();
-        }
+        const newPost = await PostModel({
+            title: title,
+            imageUrl: imageUrl || "",
+            email: email
+        })
+        await newPost.save();
         res.status(200).send({ message: 'Post uploaded' });
     } catch (error) {
         console.log(error)
