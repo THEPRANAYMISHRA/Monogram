@@ -14,6 +14,7 @@ export default function Feed() {
   const [resposnse, setResponse] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
   const [user] = useAuthState(auth);
+  const IMAGEBB_KEY = "5a1d021bb2e374d8d8aeba929645b229";
 
   const handlePostSubmit = async (e) => {
     e.preventDefault();
@@ -23,19 +24,28 @@ export default function Feed() {
         let formData = new FormData();
         formData.append("title", title);
         formData.append("email", user.email);
-        if (image !== null) {
-          formData.append("image", image);
+
+        if (!image) {
+          const response = await axios.post(`${baseurl}/post/`, formData);
+          setResponse(response);
+        } else {
+          let formDataForImage = new FormData();
+          formDataForImage.append("image", image);
+          let imgres = await axios.post(
+            `https://api.imgbb.com/1/upload?key=${IMAGEBB_KEY}`,
+            formDataForImage
+          );
+          console.log(imgres.data);
+          formData.append("imageUrl", imgres.data.data.url);
+          const response = await axios.post(`${baseurl}/post/`, formData);
+          setResponse(response);
         }
-        const response = await axios.post(`${baseurl}/post/`, formData, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
-        setResponse(response);
-        setTitle("");
-        setImage(null);
-        setPreviewImage(null);
       } catch (error) {
         setResponse(error.response);
       } finally {
+        setTitle("");
+        setImage(null);
+        setPreviewImage(null);
         setIsUploading(false);
         setTimeout(() => {
           setResponse(null);
