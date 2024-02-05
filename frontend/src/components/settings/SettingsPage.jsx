@@ -14,7 +14,7 @@ export default function SettingsPage() {
   const [coverPreviewImage, setCoverPreviewImage] = useState(
     profileData.coverPhoto
   );
-  const IMAGEBB_KEY = process.env.REACT_APP_IMAGEBB_KEY;
+  const IMAGEBB_KEY = "5a1d021bb2e374d8d8aeba929645b229";
   const [updatedProfile, setUpdatedProfile] = useState(false);
   const [updateProfileError, setUpdateProfileError] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
