@@ -42,23 +42,14 @@ export default function ViewOthers() {
     isFollowingThisUser();
   }, [query]);
 
-  // const onShowPosts = () => {
-  //   let str = "Posts";
-  //   setRenderJsx(str);
-  // };
-  // const onShowFollowers = () => {
-  //   let str = "Followers";
-  //   setRenderJsx(str);
-  // };
-
   return (
     <div className="h-100 w-100">
       <div className="border d-flex flex-column justify-content-center p-3 h-25 gap-2">
         <div className="d-flex profile-picture gap-3 align-items-center">
           <LazyLoadImage
             src={
-              userData?.imageurl
-                ? userData.imageurl
+              userData?.profilePhoto
+                ? userData.profilePhoto
                 : "https://cdn-icons-png.flaticon.com/128/3177/3177440.png"
             }
             alt="Profile"
